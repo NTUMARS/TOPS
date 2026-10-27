@@ -25,8 +25,12 @@ node serve.js . 8765      # then open http://127.0.0.1:8765/
 
 ## Deployment (GitHub Pages)
 
-The site is published at **https://morpheus-an.github.io/TOPS/** from the `gh-pages` branch of
-[Morpheus-An/TOPS](https://github.com/Morpheus-An/TOPS); `main` carries the same files.
+The site is published at **https://ntumars.github.io/TOPS/** from the `gh-pages` branch of
+[NTUMARS/TOPS](https://github.com/NTUMARS/TOPS); `main` carries the same files.
+(The repo started as `Morpheus-An/TOPS` and was transferred to the NTUMARS organisation on 27 Oct 2026. GitHub
+does not redirect Pages after a transfer, so the old `morpheus-an.github.io/TOPS` URL now returns 404; git pushes
+to the old remote URL are redirected, but it is cleaner to run
+`git remote set-url origin https://github.com/NTUMARS/TOPS.git` once.)
 
 To publish an update, commit on `main` and push both branches:
 
@@ -44,7 +48,7 @@ The footer shows a live page-view counter (`js/visits.js`, markup in the footer 
 
 * **Default: [hits.sh](https://hits.sh)** — free, no sign-up, no cookies. The badge image *is* the counting
   request (one per page load = one view) and shows `today / total`. The counter key is derived from the page URL,
-  so the live site counts under `morpheus-an.github.io/TOPS` while local previews count under their own key.
+  so the live site counts under `ntumars.github.io/TOPS` while local previews count under their own key.
   If hits.sh is unreachable the chip shows `—` instead of a broken image.
 * **Optional upgrade: [GoatCounter](https://www.goatcounter.com)** — adds *unique visitors* and a private
   dashboard (countries, referrers). Create a site there (pick a code such as `tops`), enable *Settings → Allow

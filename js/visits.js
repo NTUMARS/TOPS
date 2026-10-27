@@ -1,7 +1,7 @@
 /* Footer visitor counter.
    Default provider: hits.sh — free, no sign-up. One badge request per page load = one page view.
    The counter key is derived from the page URL (host + path), so local previews count under their own
-   key and never touch the live counter (morpheus-an.github.io/TOPS).
+   key and never touch the live counter (ntumars.github.io/TOPS).
    Optional provider: GoatCounter — set data-goatcounter="CODE" on #visits (see README). Shows page views
    AND unique visitors as native text, with a private dashboard at https://CODE.goatcounter.com. */
 (function () {
