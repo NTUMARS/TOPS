@@ -446,9 +446,19 @@
 </section>
 
 <footer class="footer">
-  <div class="container row">
-    <img class="logo" src="assets/marslab_logo.png" alt="MARS Lab">
-    <p>© 2026 MARS Lab, Nanyang Technological University · Correspondence: <a href="mailto:jindou.jia@ntu.edu.sg">jindou.jia@ntu.edu.sg</a>, <a href="mailto:jianfei.yang@ntu.edu.sg">jianfei.yang@ntu.edu.sg</a></p>
+  <div class="container">
+    <div class="row">
+      <img class="logo" src="assets/marslab_logo.png" alt="MARS Lab">
+      <p>© 2026 MARS Lab, Nanyang Technological University · Correspondence: <a href="mailto:jindou.jia@ntu.edu.sg">jindou.jia@ntu.edu.sg</a>, <a href="mailto:jianfei.yang@ntu.edu.sg">jianfei.yang@ntu.edu.sg</a></p>
+    </div>
+    <!-- Visitor counter (js/visits.js). Default provider: hits.sh — free, no sign-up; the counter key is this page's URL.
+         Optional: set data-goatcounter="YOURCODE" after creating a site at goatcounter.com (and enabling its
+         “visitor counter” setting) to show page views + unique visitors and get a private dashboard. -->
+    <div class="visits" id="visits" data-goatcounter="">
+      <div class="visits-lead"><span class="live-dot" aria-hidden="true"></span>Visitors</div>
+      <div class="chips" id="visits-chips" aria-live="polite"></div>
+      <p class="visits-note" id="visits-note">Page views today / in total since 27 Oct 2026 · counted by <a href="https://hits.sh" target="_blank" rel="noopener">hits.sh</a>, no cookies.</p>
+    </div>
   </div>
 </footer>
 
@@ -459,5 +469,6 @@
 <script src="js/hero.js"></script>
 <script src="js/method.js"></script>
 <script src="js/main.js"></script>
+<script src="js/visits.js"></script>
 </body>
 </html>

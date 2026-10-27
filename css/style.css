@@ -487,6 +487,23 @@ input[type="range"] { width: 100%; accent-color: var(--purple); }
 .footer p { margin: 0; font-size: 13.5px; color: var(--muted); }
 .footer a { color: var(--ink-2); }
 
+/* visitor counter (footer) */
+.footer .visits { margin-top: 22px; padding-top: 20px; border-top: 1px solid var(--line); display: flex; align-items: center; gap: 12px 18px; flex-wrap: wrap; }
+.visits-lead { display: inline-flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 700; color: var(--ink-2); letter-spacing: .01em; }
+.live-dot { position: relative; width: 8px; height: 8px; border-radius: 50%; background: var(--teal); flex: none; }
+.live-dot::after { content: ""; position: absolute; inset: -5px; border-radius: 50%; border: 2px solid var(--teal); opacity: 0; animation: ping 2.6s ease-out infinite; }
+@keyframes ping { 0% { transform: scale(.45); opacity: .75; } 70%, 100% { transform: scale(1.25); opacity: 0; } }
+.chips { display: inline-flex; flex-wrap: wrap; gap: 10px; }
+.chip { display: inline-flex; align-items: stretch; height: 26px; border-radius: 7px; overflow: hidden; box-shadow: var(--shadow-sm); }
+.chip .lab { display: inline-flex; align-items: center; padding: 0 10px; background: var(--ink); color: #fff; font-size: 11px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; white-space: nowrap; }
+.chip .val { display: inline-flex; align-items: center; justify-content: center; min-width: 46px; padding: 0 10px; background: var(--blue); color: #fff; font-family: var(--font-mono); font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.chip img { display: block; height: 26px; width: auto; }
+.footer .visits-note { margin-left: auto; font-size: 12.5px; }
+.visits.is-off .live-dot { background: var(--line-2); }
+.visits.is-off .live-dot::after { display: none; }
+@media (max-width: 760px) { .footer .visits-note { margin-left: 0; flex-basis: 100%; } }
+@media (prefers-reduced-motion: reduce) { .live-dot::after { animation: none; } }
+
 /* misc */
 .notice { display: inline-flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--muted); }
 .notice i { width: 6px; height: 6px; border-radius: 50%; background: var(--amber); display: inline-block; }
