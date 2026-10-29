@@ -1,66 +1,74 @@
-# TOPS project page
+<div align="center">
 
-Static project website for **TOPS: Reshaping Flow Source and Transport for Multi-Task Robot Manipulation**.
+# TOPS: Reshaping Flow Source and Transport for Multi-Task Robot Manipulation
 
-## Preview locally
+**Tuo An<sup>1</sup>, Chuhao Zhou<sup>1</sup>, Jiahua Dong<sup>1</sup>, Jingliang Li<sup>1</sup>, Jiaqi Bai<sup>1</sup>, Jindou Jia<sup>1,†</sup>, Jianfei Yang<sup>1,†</sup>**
 
-Any static file server works. The bundled one supports HTTP range requests (needed for smooth video seeking):
+<sup>1</sup> MARS Lab, Nanyang Technological University &nbsp;·&nbsp; <sup>†</sup> Joint corresponding authors
 
-```bash
-cd website
-node serve.js . 8765      # then open http://127.0.0.1:8765/
-# or: python3 -m http.server 8765
+[![Project Page](https://img.shields.io/badge/Project%20Page-ntumars.github.io%2FTOPS-2b5fb4)](https://ntumars.github.io/TOPS/)
+[![arXiv](https://img.shields.io/badge/arXiv-2610.36694-b31b1b?logo=arxiv&logoColor=white)](https://arxiv.org/abs/2610.36694)
+[![PDF](https://img.shields.io/badge/PDF-arXiv%20v1-555555)](https://arxiv.org/pdf/2610.36694v1)
+![Code](https://img.shields.io/badge/Code-coming%20soon-e8a317)
+
+</div>
+
+> [!NOTE]
+> **Code coming soon.** We are preparing the training and evaluation code, the task-source construction and schedule scripts, and checkpoints for release. Watch or star this repository to be notified. Until then, the [project page](https://ntumars.github.io/TOPS/) has animated explanations of the method and all real-world rollouts.
+
+<p align="center"><img src="assets/teaser.png" width="100%" alt="TOPS overview: task-specific multimodal sources and a slow-then-fast schedule reshape the flow for each task."></p>
+
+## TL;DR
+
+A flow-matching policy does not have to start every task from the same Gaussian, nor move along the same linear path. **TOPS (Task-Oriented Priors and Schedules)** fits a multimodal source to each task from reverse-mapped expert actions and slows, then accelerates, transport along the directions that need to expand. No change to the policy network, one integration step at inference.
+
+* **Task-oriented source.** Expert action chunks are mapped back through a warm-up flow and fitted with a small per-task mixture, so the language instruction selects *where generation begins*.
+* **Task-oriented schedule.** Guided by the source-target covariance mismatch, the interpolation slows the transition toward expert actions early in denoising and accelerates it later along directions that must expand.
+* **Theory.** Under a Gaussian endpoint model, the schedule adjustment lowers an upper bound on velocity-prediction risk.
+* **Practice.** One schedule-aware step (NFE = 2) beats ten-step Standard FM on LIBERO, LIBERO-Plus and CALVIN, transfers to π<sub>0.5</sub>, and improves real-world success.
+
+## Abstract
+
+Flow-based policies for language-conditioned multi-task manipulation commonly share a single Gaussian source prior and a common linear transport path across tasks. However, reliably executing multiple tasks with distinct motion requirements remains challenging for a shared policy. We introduce TOPS (Task-Oriented Priors and Schedules), which adapts the flow source prior and interpolation schedule to each task without modifying the network architecture. TOPS first constructs multimodal task sources from reverse-mapped expert action sequences, allowing language instructions to select where generation begins. Guided by source-target covariance mismatch, it then slows the transition toward expert actions early in denoising and accelerates it later along directions requiring expansion. Under a Gaussian endpoint model, our analysis shows that this schedule adjustment can lower an upper bound on velocity-prediction risk. Experiments on LIBERO, LIBERO-Plus, and CALVIN demonstrate improved performance across in-distribution, perturbation and cross-environment settings, alongside better data efficiency. Using one integration step, TOPS raises LIBERO-10 success from 53.44% to 69.67% compared with ten-step Standard Flow Matching (FM), while reducing inference time to approximately one-sixth of the baseline. TOPS also yields consistent gains when transferred to the large-scale flow-based π<sub>0.5</sub> policy across all four evaluated settings. Real-world experiments further demonstrate improved task success, including an increase from 20% with standard FM to 80% with TOPS on the upper-drawer opening task.
+
+## Results
+
+Mean ± s.d. over three training runs; success rate (%) on LIBERO, average completed chain length (of 5) on CALVIN. Ten-step baselines use an explicit midpoint solver (NFE = 20); TOPS uses one two-stage schedule-aware step (NFE = 2). See the paper for the full table.
+
+| Method | NFE | LIBERO-10 (ID) | LIBERO-Plus (OOD) | Inference (ms) | CALVIN D→D (ID) | CALVIN ABC→D (OOD) | Inference (ms) |
+|:--|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+| Standard FM | 20 | 53.44 ± 2.93 | 27.11 ± 0.34 | 49.4 | 1.90 ± 0.05 | 0.70 ± 0.03 | 56.2 |
+| MeanFlow | 1 | 59.00 ± 2.83 | 34.73 ± 0.32 | 5.7 | 1.89 ± 0.02 | 0.86 ± 0.02 | 5.4 |
+| PriorGrad | 20 | 62.33 ± 0.24 | 30.56 ± 0.30 | 48.3 | 1.97 ± 0.06 | 1.02 ± 0.04 | 55.4 |
+| **TOPS (ours)** | 2 | **69.67 ± 0.61** | **35.29 ± 0.08** | 8.2 | **2.27 ± 0.06** | **1.05 ± 0.04** | 9.0 |
+
+**Transfer to π<sub>0.5</sub>** (same recipe on the official pi05_base checkpoint, one schedule-aware step vs. ten Euler steps): LIBERO-10 94.0 → 94.8, LIBERO-Plus 64.4 → 69.0, CALVIN D→D 3.673 → 3.941, CALVIN ABC→D 3.033 → 3.744.
+
+**Real world** (8 tasks × 20 rollouts on a physical arm): TOPS succeeds in 124 / 160 trials (77.5%) vs. 82 / 160 (51.25%) for Standard FM; upper-drawer opening improves from 20% to 80%.
+
+<p align="center"><img src="assets/demo_drawer.gif" width="100%" alt="Upper-drawer opening at 2x speed: Standard FM fails, TOPS succeeds."></p>
+<p align="center"><sub>Upper-drawer opening, 2× speed. Left: Standard FM. Right: TOPS. All rollouts for the eight tasks are on the <a href="https://ntumars.github.io/TOPS/#realworld">project page</a>.</sub></p>
+
+## Release plan
+
+- [ ] Training and evaluation code (LIBERO, LIBERO-Plus, CALVIN)
+- [ ] Task-source construction and schedule scripts
+- [ ] Pretrained checkpoints
+- [ ] π<sub>0.5</sub> integration
+- [ ] Real-world deployment scripts
+
+## Citation
+
+```bibtex
+@article{an2026tops,
+  title   = {TOPS: Reshaping Flow Source and Transport for Multi-Task Robot Manipulation},
+  author  = {An, Tuo and Zhou, Chuhao and Dong, Jiahua and Li, Jingliang and
+             Bai, Jiaqi and Jia, Jindou and Yang, Jianfei},
+  journal = {arXiv preprint arXiv:2610.36694},
+  year    = {2026}
+}
 ```
 
-## Layout
+## Contact
 
-- `index.html` – the page (hero, abstract, motivation, method explainers, results, real-world demos, BibTeX)
-- `css/style.css` – styles
-- `js/hero.js` – hero background: particles flowing from source distributions to task targets (Standard FM vs TOPS)
-- `js/method.js` – interactive explainers A (flow reversal → task sources) and B (spectral scheduling, exact Gaussian-endpoint maths)
-- `js/main.js` – nav, scroll reveals, results table marks, π0.5 bars, real-world chart, video gallery, BibTeX copy
-- `assets/figs/` – paper figures rendered from the PDF sources at 220 dpi
-- `assets/videos/` – real-world rollouts transcoded to 720p H.264 (+ poster frames) and the full demo reel
-- `TOPS_final.pdf` – the paper
-
-## Deployment (GitHub Pages)
-
-The site is published at **https://ntumars.github.io/TOPS/** from the `gh-pages` branch of
-[NTUMARS/TOPS](https://github.com/NTUMARS/TOPS); `main` carries the same files.
-(The repo started as `Morpheus-An/TOPS` and was transferred to the NTUMARS organisation on 27 Oct 2026. GitHub
-does not redirect Pages after a transfer, so the old `morpheus-an.github.io/TOPS` URL now returns 404; git pushes
-to the old remote URL are redirected, but it is cleaner to run
-`git remote set-url origin https://github.com/NTUMARS/TOPS.git` once.)
-
-To publish an update, commit on `main` and push both branches:
-
-```bash
-git push origin main
-git push origin main:gh-pages
-```
-
-A "pages build and deployment" run appears under the repo's Actions tab; the site refreshes within a minute or two.
-(If you would rather serve from `main` directly, switch *Settings → Pages → Branch* to `main / (root)` and delete `gh-pages`.)
-
-## Visitor counter
-
-The footer shows a live page-view counter (`js/visits.js`, markup in the footer of `index.html`).
-
-* **Default: [hits.sh](https://hits.sh)** — free, no sign-up, no cookies. The badge image *is* the counting
-  request (one per page load = one view) and shows `today / total`. The counter key is derived from the page URL,
-  so the live site counts under `ntumars.github.io/TOPS` while local previews count under their own key.
-  If hits.sh is unreachable the chip shows `—` instead of a broken image.
-* **Optional upgrade: [GoatCounter](https://www.goatcounter.com)** — adds *unique visitors* and a private
-  dashboard (countries, referrers). Create a site there (pick a code such as `tops`), enable *Settings → Allow
-  adding visitor counts on your website*, then set `data-goatcounter="tops"` on `#visits` in `index.html`.
-  The module switches to native, animated numbers automatically; nothing else changes.
-* Not used: busuanzi (不蒜子). Its counting endpoint was returning 502s at build time, and it keys counts by the
-  `Referer` header, which browsers (Safari especially) trim to the origin for cross-site requests — on a shared
-  `*.github.io` host that merges this page with your other GitHub Pages sites.
-
-## Still to fill in
-
-1. arXiv link: in `index.html`, replace `href="#"` on `#link-arxiv` and remove `aria-disabled`.
-2. Code link on `#link-code`, the same way.
-3. BibTeX block once the arXiv identifier is known.
-4. Fonts and KaTeX load from Google Fonts / jsDelivr; the page still renders without network, with system fonts and raw LaTeX.
+Questions and collaboration: [jindou.jia@ntu.edu.sg](mailto:jindou.jia@ntu.edu.sg) · [jianfei.yang@ntu.edu.sg](mailto:jianfei.yang@ntu.edu.sg)
