@@ -26,21 +26,18 @@ node serve.js . 8765      # then open http://127.0.0.1:8765/
 ## Deployment (GitHub Pages)
 
 The site is published at **https://ntumars.github.io/TOPS/** from the `gh-pages` branch of
-[NTUMARS/TOPS](https://github.com/NTUMARS/TOPS); `main` carries the same files.
-(The repo started as `Morpheus-An/TOPS` and was transferred to the NTUMARS organisation on 27 Oct 2026. GitHub
-does not redirect Pages after a transfer, so the old `morpheus-an.github.io/TOPS` URL now returns 404; git pushes
-to the old remote URL are redirected, but it is cleaner to run
-`git remote set-url origin https://github.com/NTUMARS/TOPS.git` once.)
+[NTUMARS/TOPS](https://github.com/NTUMARS/TOPS). The site source lives **only** on `gh-pages`; the `main` branch is
+reserved for the code release (currently a README announcing that the code is coming soon).
+(The repo started as `Morpheus-An/TOPS` and was transferred to the NTUMARS organisation on 27 Oct 2026. GitHub does
+not redirect Pages after a transfer, so the old `morpheus-an.github.io/TOPS` URL returns 404.)
 
-To publish an update, commit on `main` and push both branches:
+To publish an update, commit on `gh-pages` in this folder and push it:
 
 ```bash
-git push origin main
-git push origin main:gh-pages
+git push origin gh-pages
 ```
 
 A "pages build and deployment" run appears under the repo's Actions tab; the site refreshes within a minute or two.
-(If you would rather serve from `main` directly, switch *Settings → Pages → Branch* to `main / (root)` and delete `gh-pages`.)
 
 ## Visitor counter
 
@@ -58,9 +55,7 @@ The footer shows a live page-view counter (`js/visits.js`, markup in the footer 
   `Referer` header, which browsers (Safari especially) trim to the origin for cross-site requests — on a shared
   `*.github.io` host that merges this page with your other GitHub Pages sites.
 
-## Still to fill in
+## Notes
 
-1. arXiv link: in `index.html`, replace `href="#"` on `#link-arxiv` and remove `aria-disabled`.
-2. Code link on `#link-code`, the same way.
-3. BibTeX block once the arXiv identifier is known.
-4. Fonts and KaTeX load from Google Fonts / jsDelivr; the page still renders without network, with system fonts and raw LaTeX.
+* The hero buttons link to the arXiv PDF (`https://arxiv.org/pdf/2610.36694v1`) and the GitHub repo; the BibTeX block carries the arXiv id.
+* Fonts and KaTeX load from Google Fonts / jsDelivr; the page still renders without network, with system fonts and raw LaTeX.
